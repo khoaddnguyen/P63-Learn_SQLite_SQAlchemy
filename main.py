@@ -18,7 +18,7 @@ from flask_sqlalchemy import SQLAlchemy
 # create the app
 app = Flask(__name__)
 
-# crate database
+# create database
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///new-books-collection.db"
 
 
