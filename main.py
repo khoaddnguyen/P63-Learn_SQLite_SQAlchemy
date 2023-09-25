@@ -47,3 +47,34 @@ with app.app_context():
     new_book = Book(id=1, title="Harry Potter", author="J. K. Rowling", rating=9.3)
     db.session.add(new_book)
     db.session.commit()
+
+# Read all records by calling .scalars
+with app.app_context():
+    result = db.session.execute(db.select(Book).order_by(Book.title))
+    all_books = result.scalars()
+
+# Read one record by query by calling .scalar
+with app.app_context():
+    book = db.session.execute(db.select(Book).where(Book.title == "Harry Potter")).scalar()
+
+# Update a particular record by query
+with app.app_context():
+    book_to_update = db.session.execute(db.select(Book).where(Book.title == "Harry Potter")).scalar()
+    book_to_update.title = "Harry Potter and the Chamber of Secrets"
+    db.session.commit()
+
+# Update a record by Primary Key
+book_id = 1
+with app.app_context():
+    book_to_update = db.session.execute(db.select(Book).where(Book.id == book_id)).scalar()
+    # or book_to_update = db.get_or_404(Book, book_id)
+    book_to_update.title = "Harry Potter and the Goblet of Fire"
+    db.session.commit()
+
+# Delete a record by Primary Key
+book_id = 1
+with app.app_context():
+    book_to_delete = db.session.execute(db.select(Book).where(Book.id == book_id)).scalar()
+    # or book_to_delete = db.get_or_404(Book, book_id)
+    db.session.delete(book_to_delete)
+    db.session.commit()
